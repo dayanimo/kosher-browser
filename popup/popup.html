@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <title data-i18n="brand_name">דפדפן כשר</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.5 4 5.6v6.1c0 4.6 3.2 8.6 8 9.8 4.8-1.2 8-5.2 8-9.8V5.6L12 2.5Z"/>
+            <path d="m8.8 12.2 2.4 2.4 4.4-4.8"/>
+          </svg>
+        </span>
+        <div class="brand-text">
+          <span class="brand-name" data-i18n="brand_name">דפדפן כשר</span>
+          <span id="statusText" class="brand-status">—</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="metrics" data-i18n-aria="metrics_aria" aria-label="סטטיסטיקת חסימה">
+      <div class="metric">
+        <span class="metric-value" id="blocksToday">0</span>
+        <span class="metric-label" data-i18n="blocked_today">נחסמו היום</span>
+      </div>
+      <div class="metric-divider" aria-hidden="true"></div>
+      <div class="metric">
+        <span class="metric-value" id="blocksTotal">0</span>
+        <span class="metric-label" data-i18n="all_time">סך הכל</span>
+      </div>
+    </section>
+
+    <section class="panel focus-panel" aria-labelledby="focus-heading">
+      <div class="panel-head">
+        <h2 id="focus-heading" data-i18n="focus_session">מפגש פוקוס</h2>
+        <span class="panel-hint" data-i18n="no_distractions">ללא הסחות</span>
+      </div>
+
+      <div id="focusInactive" class="focus-inactive">
+        <div class="presets" role="group" data-i18n-aria="presets_aria" aria-label="משכים מוגדרים מראש">
+          <button type="button" class="preset" data-min="15"><span class="preset-num">15</span><span class="preset-unit" data-i18n="min_unit">דק׳</span></button>
+          <button type="button" class="preset" data-min="25"><span class="preset-num">25</span><span class="preset-unit" data-i18n="min_unit">דק׳</span></button>
+          <button type="button" class="preset" data-min="45"><span class="preset-num">45</span><span class="preset-unit" data-i18n="min_unit">דק׳</span></button>
+          <button type="button" class="preset" data-min="60"><span class="preset-num">1</span><span class="preset-unit" data-i18n="hr_unit">שע׳</span></button>
+          <button type="button" class="preset" data-min="120"><span class="preset-num">2</span><span class="preset-unit" data-i18n="hr_unit">שע׳</span></button>
+        </div>
+        <div class="custom-row">
+          <div class="field">
+            <input type="number" id="customMin" min="1" max="720" data-i18n-placeholder="custom_placeholder" placeholder="מותאם" />
+            <span class="field-suffix" data-i18n="min_unit">דק׳</span>
+          </div>
+          <button type="button" id="startFocus" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4v16l14-8L6 4Z"/></svg>
+            <span data-i18n="start">התחל</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="focusActive" class="focus-active" hidden>
+        <div class="countdown">
+          <span class="countdown-pulse" aria-hidden="true"></span>
+          <span class="countdown-time" id="focusCountdown">--:--</span>
+          <span class="countdown-label" id="focusLabel" data-i18n="focus_default_label">פוקוס</span>
+        </div>
+        <div class="end-row">
+          <input type="password" id="endPassword" data-i18n-placeholder="password_if_set_placeholder" placeholder="סיסמה (אם הוגדרה)" autocomplete="off" />
+          <button type="button" id="endFocus" class="btn btn-quiet" data-i18n="end_early">סיים מוקדם</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="filters-heading">
+      <div class="panel-head">
+        <h2 id="filters-heading" data-i18n="filters">סינון</h2>
+        <span class="panel-hint" data-i18n="tap_to_toggle">הקש להחלפה</span>
+      </div>
+      <ul class="filter-list">
+        <li>
+          <label class="filter">
+            <span class="filter-icon" data-tone="violet" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+            </span>
+            <span class="filter-text">
+              <span class="filter-name" data-i18n="cat_social">רשתות חברתיות</span>
+              <span class="filter-meta" data-i18n="cat_social_meta">פיד וציר זמן</span>
+            </span>
+            <input type="checkbox" id="catSocial" class="filter-check" />
+            <span class="filter-pill" aria-hidden="true"></span>
+          </label>
+        </li>
+        <li>
+          <label class="filter">
+            <span class="filter-icon" data-tone="rose" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m10 9 5 3-5 3V9Z"/></svg>
+            </span>
+            <span class="filter-text">
+              <span class="filter-name" data-i18n="cat_video">וידאו</span>
+              <span class="filter-meta" data-i18n="cat_video_meta">יוטיוב וסטרימינג</span>
+            </span>
+            <input type="checkbox" id="catVideo" class="filter-check" />
+            <span class="filter-pill" aria-hidden="true"></span>
+          </label>
+        </li>
+        <li>
+          <label class="filter">
+            <span class="filter-icon" data-tone="indigo" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13a2 2 0 0 1 2 2v11a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V5Z"/><path d="M19 8h1.5a.5.5 0 0 1 .5.5V17a2 2 0 0 1-2 2"/><path d="M8 9h7M8 13h7M8 17h4"/></svg>
+            </span>
+            <span class="filter-text">
+              <span class="filter-name" data-i18n="cat_news">חדשות</span>
+              <span class="filter-meta" data-i18n="cat_news_meta">כותרות ופרשנות</span>
+            </span>
+            <input type="checkbox" id="catNews" class="filter-check" />
+            <span class="filter-pill" aria-hidden="true"></span>
+          </label>
+        </li>
+        <li>
+          <label class="filter">
+            <span class="filter-icon" data-tone="amber" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11a2 2 0 0 1-2 1.8H8.2A2 2 0 0 1 6.2 19L5 8Z"/><path d="M9 8a3 3 0 1 1 6 0"/></svg>
+            </span>
+            <span class="filter-text">
+              <span class="filter-name" data-i18n="cat_shopping">קניות</span>
+              <span class="filter-meta" data-i18n="cat_shopping_meta">חנויות ומבצעים</span>
+            </span>
+            <input type="checkbox" id="catShopping" class="filter-check" />
+            <span class="filter-pill" aria-hidden="true"></span>
+          </label>
+        </li>
+        <li>
+          <label class="filter">
+            <span class="filter-icon" data-tone="slate" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 4 7v5c0 4 3.3 7.6 8 9 4.7-1.4 8-5 8-9V7l-8-3Z"/><path d="M9.5 12h5M12 9.5v5"/></svg>
+            </span>
+            <span class="filter-text">
+              <span class="filter-name" data-i18n="cat_adult">תוכן למבוגרים</span>
+              <span class="filter-meta" data-i18n="cat_adult_meta">תכנים מפורשים</span>
+            </span>
+            <input type="checkbox" id="catAdult" class="filter-check" />
+            <span class="filter-pill" aria-hidden="true"></span>
+          </label>
+        </li>
+        <li>
+          <label class="filter">
+            <span class="filter-icon" data-tone="teal" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/><path d="M6 6h2M16 16h2M14 6l6 0M4 18h6"/></svg>
+            </span>
+            <span class="filter-text">
+              <span class="filter-name" data-i18n="cat_gambling">הימורים</span>
+              <span class="filter-meta" data-i18n="cat_gambling_meta">הימורים וקזינו</span>
+            </span>
+            <input type="checkbox" id="catGambling" class="filter-check" />
+            <span class="filter-pill" aria-hidden="true"></span>
+          </label>
+        </li>
+      </ul>
+
+      <label class="safesearch">
+        <span class="safesearch-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg>
+        </span>
+        <span class="safesearch-text">
+          <span class="safesearch-name" data-i18n="safesearch_enforced">חיפוש בטוח מאולץ</span>
+          <span class="safesearch-meta" data-i18n="safesearch_engines">גוגל, בינג, דאקדאקגו</span>
+        </span>
+        <input type="checkbox" id="safeSearchToggle" class="filter-check" />
+        <span class="filter-pill" aria-hidden="true"></span>
+      </label>
+    </section>
+
+    <footer class="footer">
+      <button type="button" id="openOptions" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2.8"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.2.6.7 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+        <span data-i18n="open_options_label">הגדרות ורשימת חסימה</span>
+        <svg class="chev" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </footer>
+
+  </div>
+
+  <div id="pwModal" class="pw-modal" hidden>
+    <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
+      <h2 id="pwModalTitle" class="pw-title" data-i18n="pw_modal_title">סיסמה נדרשת</h2>
+      <p class="pw-lede" data-i18n="pw_modal_lede">הזן סיסמה כדי לשנות הגדרה זו.</p>
+      <input type="password" id="pwModalInput" autocomplete="current-password" />
+      <p id="pwModalStatus" class="pw-status" aria-live="polite"></p>
+      <div class="pw-actions">
+        <button type="button" id="pwModalCancel" class="btn btn-quiet" data-i18n="pw_modal_cancel">ביטול</button>
+        <button type="button" id="pwModalSubmit" class="btn btn-primary" data-i18n="pw_modal_submit">אישור</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>רגע של הפסקה</title>
+  <link rel="stylesheet" href="blocked.css" />
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <div class="aurora aurora-a"></div>
+    <div class="aurora aurora-b"></div>
+    <div class="aurora aurora-c"></div>
+    <div class="grain"></div>
+  </div>
+
+  <div class="stage">
+    <header class="brand" aria-hidden="true">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/>
+        </svg>
+      </span>
+      <span class="brand-name" data-i18n="brand_name">דפדפן כשר</span>
+    </header>
+
+    <main class="card" role="main">
+      <figure class="orb" aria-hidden="true">
+        <svg viewBox="0 0 220 220" width="220" height="220">
+          <defs>
+            <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="oklch(0.92 0.06 200)" stop-opacity="0.55"/>
+              <stop offset="55%" stop-color="oklch(0.78 0.10 210)" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="oklch(0.55 0.12 240)" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="core" cx="42%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="oklch(0.98 0.02 200)"/>
+              <stop offset="40%" stop-color="oklch(0.86 0.08 200)"/>
+              <stop offset="100%" stop-color="oklch(0.58 0.10 220)"/>
+            </radialGradient>
+            <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="oklch(0.95 0.04 200)" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="oklch(0.75 0.10 210)" stop-opacity="0.2"/>
+            </linearGradient>
+          </defs>
+          <circle class="orb-halo" cx="110" cy="110" r="100" fill="url(#halo)"/>
+          <circle class="orb-ring orb-ring-outer" cx="110" cy="110" r="84" fill="none" stroke="url(#ring)" stroke-width="0.75"/>
+          <circle class="orb-ring orb-ring-mid" cx="110" cy="110" r="64" fill="none" stroke="url(#ring)" stroke-width="0.6"/>
+          <circle class="orb-core" cx="110" cy="110" r="42" fill="url(#core)"/>
+          <circle class="orb-pulse" cx="110" cy="110" r="42" fill="none" stroke="oklch(0.95 0.04 200)" stroke-width="1" stroke-opacity="0.5"/>
+        </svg>
+      </figure>
+
+      <p class="eyebrow" data-i18n="eyebrow">גבול שהצבת</p>
+      <h1 class="headline" data-i18n="headline">קח נשימה.</h1>
+      <p id="reason" class="reason"></p>
+      <p id="message" class="message"></p>
+
+      <section id="focusInfo" class="focus" hidden aria-live="polite">
+        <div class="focus-rule" aria-hidden="true"></div>
+        <p class="focus-label" data-i18n="focus_label">מפגש פוקוס בעיצומו</p>
+        <p id="countdown" class="countdown" aria-label="זמן שנותר" data-i18n-aria="time_remaining_aria">--:--</p>
+        <p class="focus-foot" data-i18n="focus_foot">תחזור לכאן כשהוא יסתיים. אין מה לעשות.</p>
+      </section>
+
+      <div class="actions">
+        <button id="goBack" type="button" class="btn btn-primary">
+          <span data-i18n="btn_return">חזרה למקום שממנו הגעתי</span>
+          <svg class="btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M11 6l-6 6 6 6"/>
+          </svg>
+        </button>
+        <button id="openOptions" type="button" class="btn btn-ghost" data-i18n="btn_settings">התאם הגדרות</button>
+      </div>
+    </main>
+
+    <footer class="legend" aria-hidden="true">
+      <span class="legend-dot"></span>
+      <span data-i18n="legend_text">מגן על הזמן שהקדשת לעצמך</span>
+    </footer>
+  </div>
+
+  <script src="blocked.js"></script>
+</body>
+</html>

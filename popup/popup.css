@@ -1,0 +1,893 @@
+/* דפדפן כשר — toolbar popup
+   Restrained palette: tinted off-white, deep indigo, teal, warm amber accent.
+   OKLCH throughout; neutrals tinted toward indigo.
+   RTL-first: logical properties everywhere; inline-start/end, not left/right.
+*/
+
+:root {
+  /* Surfaces — warm off-whites tinted very slightly toward indigo */
+  --surface-0: oklch(99% 0.005 260);
+  --surface-1: oklch(98.2% 0.006 260);
+  --surface-2: oklch(96.4% 0.008 260);
+  --surface-3: oklch(93.5% 0.010 260);
+
+  /* Ink — tinted grays */
+  --ink-1: oklch(22% 0.025 265);
+  --ink-2: oklch(40% 0.020 265);
+  --ink-3: oklch(56% 0.015 265);
+  --ink-4: oklch(72% 0.012 265);
+
+  /* Brand */
+  --indigo: oklch(38% 0.135 264);
+  --indigo-deep: oklch(30% 0.130 264);
+  --indigo-soft: oklch(94% 0.030 264);
+  --teal: oklch(52% 0.090 188);
+  --teal-deep: oklch(44% 0.090 188);
+  --teal-soft: oklch(94% 0.030 188);
+
+  /* Warm accent — amber, used only for active focus state */
+  --amber: oklch(78% 0.140 75);
+  --amber-deep: oklch(62% 0.140 70);
+  --amber-soft: oklch(96% 0.040 80);
+
+  /* Filter dot tones (reduced chroma, all sit at similar lightness) */
+  --tone-violet: oklch(58% 0.115 290);
+  --tone-rose: oklch(60% 0.115 15);
+  --tone-indigo: oklch(50% 0.120 264);
+  --tone-amber: oklch(64% 0.120 65);
+  --tone-slate: oklch(46% 0.045 250);
+  --tone-teal: oklch(52% 0.090 188);
+
+  /* Lines & shadow */
+  --line-1: oklch(91% 0.008 260);
+  --line-2: oklch(86% 0.010 260);
+  --shadow-1: 0 1px 0 oklch(100% 0 0 / 0.6) inset, 0 1px 2px oklch(20% 0.05 264 / 0.04);
+  --shadow-2: 0 1px 0 oklch(100% 0 0 / 0.7) inset, 0 4px 14px oklch(20% 0.05 264 / 0.06);
+
+  /* Type — Hebrew system stack first, then Latin fallbacks for numerals */
+  --font-stack: -apple-system, BlinkMacSystemFont, "SF Hebrew", "Arial Hebrew", "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --font-num: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 340px;
+  font-family: var(--font-stack);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-1);
+  background: var(--surface-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select {
+  font-family: inherit;
+  color: inherit;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Topbar ─────────────────────────────────────────────────── */
+
+.topbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 16px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, oklch(45% 0.110 200 / 0.55), transparent 60%),
+    linear-gradient(200deg, var(--indigo-deep), var(--indigo) 60%, oklch(34% 0.115 230));
+  color: oklch(98% 0.010 260);
+  isolation: isolate;
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(100% 0 0 / 0.18), transparent);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: oklch(100% 0 0 / 0.10);
+  color: oklch(96% 0.015 200);
+  border: 1px solid oklch(100% 0 0 / 0.14);
+  box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.18);
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.brand-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.brand-status {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: oklch(90% 0.030 195);
+  white-space: nowrap;
+}
+
+/* Switch — uses inset-inline-start so the thumb naturally sits on the
+   start side in both LTR and RTL. The "on" state translates toward the
+   end edge using a logical custom property. */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.switch input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: oklch(100% 0 0 / 0.18);
+  border: 1px solid oklch(100% 0 0 / 0.10);
+  transition: background 280ms var(--ease), border-color 280ms var(--ease);
+}
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  inset-inline-start: 2px;
+  inset-block-start: 2px;
+  border-radius: 50%;
+  background: oklch(99% 0 0);
+  box-shadow: 0 1px 2px oklch(20% 0.04 264 / 0.35), 0 0 0 0.5px oklch(20% 0.04 264 / 0.15);
+  transition: transform 280ms var(--ease);
+}
+/* LTR fallback */
+.switch input:checked + .slider::before {
+  transform: translateX(16px);
+}
+/* RTL: thumb slides toward the end edge, which is to the left */
+[dir="rtl"] .switch input:checked + .slider::before {
+  transform: translateX(-16px);
+}
+.switch input:checked + .slider {
+  background: oklch(72% 0.110 175);
+  border-color: oklch(72% 0.110 175);
+}
+.switch input:focus-visible + .slider {
+  box-shadow: 0 0 0 2px var(--surface-1), 0 0 0 4px oklch(72% 0.110 175);
+}
+
+/* ── Metrics strip ─────────────────────────────────────────── */
+
+.metrics {
+  display: flex;
+  align-items: stretch;
+  background: var(--surface-0);
+  border-block-end: 1px solid var(--line-1);
+  padding: 14px 16px;
+}
+
+.metric {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-value {
+  font-family: var(--font-num);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: var(--ink-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: var(--ink-3);
+}
+
+.metric-divider {
+  width: 1px;
+  margin-block: 4px;
+  margin-inline: 16px;
+  background: linear-gradient(180deg, transparent, var(--line-2), transparent);
+}
+
+/* ── Panels ─────────────────────────────────────────────────── */
+
+.panel {
+  padding: 14px 16px 16px;
+  border-block-end: 1px solid var(--line-1);
+  background: var(--surface-1);
+}
+
+.panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-block-end: 12px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: var(--ink-2);
+}
+
+.panel-hint {
+  font-size: 10.5px;
+  letter-spacing: 0.2px;
+  color: var(--ink-4);
+  white-space: nowrap;
+}
+
+/* ── Focus presets ─────────────────────────────────────────── */
+
+.presets {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-block-end: 10px;
+}
+
+.preset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding-block: 9px 8px;
+  padding-inline: 0;
+  border-radius: 9px;
+  border: 1px solid var(--line-2);
+  background: var(--surface-0);
+  color: var(--ink-1);
+  cursor: pointer;
+  transition: transform 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease), box-shadow 180ms var(--ease);
+}
+
+.preset:hover {
+  border-color: oklch(72% 0.060 264);
+  background: var(--indigo-soft);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-1);
+}
+
+.preset:active {
+  transform: translateY(0);
+}
+
+.preset-num {
+  font-family: var(--font-num);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.preset-unit {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  color: var(--ink-3);
+}
+
+/* Custom row */
+
+.custom-row {
+  display: flex;
+  gap: 8px;
+}
+
+.field {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--surface-0);
+  border: 1px solid var(--line-2);
+  border-radius: 9px;
+  transition: border-color 180ms var(--ease), box-shadow 180ms var(--ease);
+}
+
+.field:focus-within {
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 3px oklch(48% 0.130 264 / 0.14);
+}
+
+input[type="number"],
+input[type="password"],
+input[type="text"] {
+  flex: 1;
+  width: 100%;
+  padding-block: 9px;
+  padding-inline: 10px;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font-size: 13px;
+  color: var(--ink-1);
+  text-align: start;
+}
+
+input::placeholder {
+  color: var(--ink-4);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.field-suffix {
+  padding-inline-end: 10px;
+  padding-inline-start: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  color: var(--ink-4);
+}
+
+/* Buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-block: 9px;
+  padding-inline: 14px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.05px;
+  cursor: pointer;
+  transition: transform 180ms var(--ease), background 180ms var(--ease), border-color 180ms var(--ease), box-shadow 180ms var(--ease);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, var(--teal), var(--teal-deep));
+  border-color: var(--teal-deep);
+  color: oklch(99% 0.010 188);
+  box-shadow: 0 1px 0 oklch(100% 0 0 / 0.25) inset, 0 1px 2px oklch(30% 0.090 188 / 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 1px 0 oklch(100% 0 0 / 0.3) inset, 0 4px 12px oklch(30% 0.090 188 / 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* The play-arrow SVG inside the Start button is meaning-bearing as a
+   "play / begin" pictogram. In RTL we mirror it so the triangle still
+   points toward forward motion (which is leftward in RTL). */
+[dir="rtl"] .btn-primary > svg:first-child {
+  transform: scaleX(-1);
+}
+
+.btn-quiet {
+  background: var(--surface-2);
+  border-color: var(--line-2);
+  color: var(--ink-2);
+}
+
+.btn-quiet:hover {
+  background: var(--surface-3);
+  color: var(--ink-1);
+}
+
+.btn-ghost {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--line-1);
+  color: var(--ink-2);
+  padding-block: 11px;
+  padding-inline: 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+}
+
+.btn-ghost:hover {
+  background: var(--surface-2);
+  color: var(--ink-1);
+  border-color: var(--line-2);
+}
+
+.btn-ghost .chev {
+  margin-inline-start: auto;
+  color: var(--ink-4);
+  transition: transform 180ms var(--ease);
+}
+
+/* The chevron is directional ("go forward"). In RTL forward means
+   leftward, so we flip the glyph and translate toward the start edge. */
+[dir="rtl"] .btn-ghost .chev {
+  transform: scaleX(-1);
+}
+
+.btn-ghost:hover .chev {
+  transform: translateX(2px);
+  color: var(--ink-2);
+}
+
+[dir="rtl"] .btn-ghost:hover .chev {
+  transform: scaleX(-1) translateX(2px);
+  color: var(--ink-2);
+}
+
+.btn:focus-visible,
+.preset:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px oklch(48% 0.130 264 / 0.18);
+}
+
+/* ── Focus active (countdown) ─────────────────────────────── */
+
+.focus-active {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.countdown {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-block: 18px 16px;
+  padding-inline: 14px;
+  border-radius: 12px;
+  background:
+    radial-gradient(80% 100% at 50% 0%, var(--amber-soft), transparent 70%),
+    var(--surface-0);
+  border: 1px solid oklch(90% 0.040 75);
+  overflow: hidden;
+}
+
+.countdown-pulse {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-start: 14px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber-deep);
+  box-shadow: 0 0 0 0 oklch(78% 0.140 75 / 0.55);
+  animation: pulse 1800ms var(--ease) infinite;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 oklch(78% 0.140 75 / 0.55); }
+  70%  { box-shadow: 0 0 0 8px oklch(78% 0.140 75 / 0); }
+  100% { box-shadow: 0 0 0 0 oklch(78% 0.140 75 / 0); }
+}
+
+/* The countdown digits read MM:SS in any direction; force LTR so they
+   are not visually reversed by the surrounding RTL flow. */
+.countdown-time {
+  font-family: var(--font-num);
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -1.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--indigo-deep);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.countdown-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  color: var(--amber-deep);
+}
+
+.end-row {
+  display: flex;
+  gap: 8px;
+}
+
+.end-row input[type="password"] {
+  flex: 1;
+  padding-block: 9px;
+  padding-inline: 10px;
+  background: var(--surface-0);
+  border: 1px solid var(--line-2);
+  border-radius: 9px;
+  font-size: 12.5px;
+  transition: border-color 180ms var(--ease), box-shadow 180ms var(--ease);
+}
+
+.end-row input[type="password"]:focus {
+  outline: none;
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 3px oklch(48% 0.130 264 / 0.14);
+}
+
+/* ── Filter list ───────────────────────────────────────────── */
+
+.filter-list {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-1);
+  border-radius: 11px;
+  background: var(--surface-0);
+  overflow: hidden;
+}
+
+.filter-list li + li {
+  border-block-start: 1px solid var(--line-1);
+}
+
+.filter,
+.safesearch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-block: 10px;
+  padding-inline: 12px;
+  cursor: pointer;
+  transition: background 160ms var(--ease);
+}
+
+.filter:hover,
+.safesearch:hover {
+  background: var(--surface-2);
+}
+
+.filter-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  background: var(--surface-2);
+  color: var(--tone-slate);
+  border: 1px solid var(--line-1);
+  transition: background 180ms var(--ease), color 180ms var(--ease), border-color 180ms var(--ease);
+}
+
+.filter-icon[data-tone="violet"] { color: var(--tone-violet); }
+.filter-icon[data-tone="rose"]   { color: var(--tone-rose); }
+.filter-icon[data-tone="indigo"] { color: var(--tone-indigo); }
+.filter-icon[data-tone="amber"]  { color: var(--tone-amber); }
+.filter-icon[data-tone="slate"]  { color: var(--tone-slate); }
+.filter-icon[data-tone="teal"]   { color: var(--tone-teal); }
+
+.filter-text,
+.safesearch-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.filter-name,
+.safesearch-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-1);
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filter-meta,
+.safesearch-meta {
+  font-size: 11px;
+  color: var(--ink-4);
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Compact pill toggle (the visible UI for the checkbox) */
+
+.filter-check {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.filter-pill {
+  position: relative;
+  width: 30px;
+  height: 18px;
+  border-radius: 18px;
+  background: var(--surface-3);
+  border: 1px solid var(--line-2);
+  flex-shrink: 0;
+  transition: background 220ms var(--ease), border-color 220ms var(--ease);
+}
+
+.filter-pill::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 1px;
+  inset-inline-start: 1px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface-0);
+  box-shadow: 0 1px 2px oklch(20% 0.04 264 / 0.20), 0 0 0 0.5px oklch(20% 0.04 264 / 0.10);
+  transition: transform 220ms var(--ease);
+}
+
+/* LTR */
+.filter-check:checked ~ .filter-pill::before {
+  transform: translateX(12px);
+}
+/* RTL: thumb slides toward the end (left) edge */
+[dir="rtl"] .filter-check:checked ~ .filter-pill::before {
+  transform: translateX(-12px);
+}
+
+.filter-check:checked ~ .filter-pill {
+  background: var(--indigo);
+  border-color: var(--indigo);
+}
+
+.filter-check:focus-visible ~ .filter-pill {
+  box-shadow: 0 0 0 3px oklch(48% 0.130 264 / 0.20);
+}
+
+/* Adult & gambling get a more cautionary on-state */
+#catAdult:checked ~ .filter-pill,
+#catGambling:checked ~ .filter-pill {
+  background: var(--indigo-deep);
+  border-color: var(--indigo-deep);
+}
+
+/* SafeSearch row sits below the list, slightly distinguished */
+
+.safesearch {
+  margin-block-start: 4px;
+  border: 1px solid var(--line-1);
+  background: var(--surface-0);
+  border-radius: 11px;
+  padding-block: 10px;
+  padding-inline: 12px;
+}
+
+.safesearch-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  background: var(--teal-soft);
+  color: var(--teal-deep);
+  border: 1px solid oklch(88% 0.030 188);
+}
+
+.safesearch:hover .safesearch-icon {
+  background: oklch(91% 0.045 188);
+}
+
+#safeSearchToggle:checked ~ .filter-pill {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+
+.footer {
+  padding: 12px 16px 16px;
+  background: var(--surface-1);
+}
+
+/* ── Disabled state when blocking is off ──────────────────── */
+
+body.is-paused .panel {
+  opacity: 0.62;
+}
+
+body.is-paused .panel-head h2::after {
+  content: " · מושהה";
+  color: var(--ink-4);
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+html[lang="en"] body.is-paused .panel-head h2::after {
+  content: " · Paused";
+}
+
+/* ── English typography overrides ─────────────────────────────
+   Hebrew has uppercase removed because casing is a no-op on
+   Hebrew letters; restore the eyebrow uppercase / wider letter-
+   spacing on small labels for English so the Latin typography
+   reads as intended. */
+
+[lang="en"] .panel-hint,
+[lang="en"] .preset-unit,
+[lang="en"] .metric-label,
+[lang="en"] .countdown-label,
+[lang="en"] h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+[lang="en"] .brand-status {
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+[lang="en"] .field-suffix {
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ── Password modal ──────────────────────────────────────── */
+
+.pw-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: oklch(20% 0.04 264 / 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  animation: pw-fade 180ms var(--ease) both;
+}
+
+.pw-modal[hidden] { display: none; }
+
+@keyframes pw-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pw-card {
+  width: 100%;
+  background: var(--surface-0);
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  padding: 18px 18px 14px;
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.6) inset,
+    0 16px 32px oklch(20% 0.05 264 / 0.20);
+  animation: pw-rise 220ms var(--ease) both;
+}
+
+@keyframes pw-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pw-title {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-1);
+  letter-spacing: -0.01em;
+}
+
+.pw-lede {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.45;
+}
+
+#pwModalInput {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--line-2);
+  border-radius: 8px;
+  background: var(--surface-0);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--ink-1);
+  letter-spacing: 0.18em;
+  text-align: center;
+}
+
+#pwModalInput:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px oklch(72% 0.110 175 / 0.25);
+}
+
+.pw-status {
+  margin: 8px 0 0;
+  min-height: 1.1em;
+  font-size: 11.5px;
+  color: oklch(58% 0.20 24);
+  text-align: center;
+}
+
+.pw-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+
+.pw-actions .btn { padding: 8px 14px; }

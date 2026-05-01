@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="page_title">דפדפן כשר — הגדרות</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" data-i18n-aria="sidebar_nav_aria" aria-label="ניווט בהגדרות">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.5 4 6v6c0 4.6 3.3 8.4 8 9.5 4.7-1.1 8-4.9 8-9.5V6l-8-3.5Z" />
+            <path d="m9 12 2.2 2.2L15.5 10" />
+          </svg>
+        </span>
+        <div class="brand-text">
+          <span class="brand-name" data-i18n="brand_name">דפדפן כשר</span>
+          <span class="brand-sub" data-i18n="settings_subtitle">הגדרות</span>
+        </div>
+      </div>
+
+      <nav class="tabs" role="tablist" data-i18n-aria="sidebar_sections_aria" aria-label="חלקי ההגדרות">
+        <button class="tab active" data-tab="blocklist" role="tab" aria-selected="true">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M5.5 5.5 18.5 18.5" />
+            </svg>
+          </span>
+          <span class="tab-label" data-i18n="tab_blocklist">רשימת חסימה</span>
+        </button>
+        <button class="tab" data-tab="categories" role="tab" aria-selected="false">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3.5" y="3.5" width="7" height="7" rx="1.4" />
+              <rect x="13.5" y="3.5" width="7" height="7" rx="1.4" />
+              <rect x="3.5" y="13.5" width="7" height="7" rx="1.4" />
+              <rect x="13.5" y="13.5" width="7" height="7" rx="1.4" />
+            </svg>
+          </span>
+          <span class="tab-label" data-i18n="tab_categories">קטגוריות</span>
+        </button>
+        <button class="tab" data-tab="schedule" role="tab" aria-selected="false">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="8.5" />
+              <path d="M12 7.5V12l3 2" />
+            </svg>
+          </span>
+          <span class="tab-label" data-i18n="tab_schedule">לוח זמנים</span>
+        </button>
+        <button class="tab" data-tab="whitelist" role="tab" aria-selected="false">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12.5 9.5 18 20 6" />
+            </svg>
+          </span>
+          <span class="tab-label" data-i18n="tab_whitelist">רשימת היתר</span>
+        </button>
+        <button class="tab" data-tab="security" role="tab" aria-selected="false">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="10.5" width="14" height="9.5" rx="2" />
+              <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+            </svg>
+          </span>
+          <span class="tab-label" data-i18n="tab_security">אבטחה</span>
+        </button>
+        <button class="tab" data-tab="general" role="tab" aria-selected="false">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" />
+            </svg>
+          </span>
+          <span class="tab-label" data-i18n="tab_general">כללי</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <span class="dot" aria-hidden="true"></span>
+        <span data-i18n="protection_active">הגנה פעילה</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <!-- Blocklist tab -->
+      <section class="panel" data-panel="blocklist" role="tabpanel">
+        <header class="panel-head">
+          <p class="eyebrow" data-i18n="blocklist_eyebrow">כללים מותאמים</p>
+          <h1 data-i18n="blocklist_title">רשימת חסימה</h1>
+          <p class="lede" data-i18n="blocklist_lede">חסום דומיינים ספציפיים. הזינו את הדומיין הבסיסי, כמו <code>youtube.com</code>. תת־דומיינים נתפסים אוטומטית.</p>
+        </header>
+
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="blocklist_card_title">הוספת דומיין</h2>
+            <p class="hint" data-i18n="blocklist_hint">אחד בכל פעם. לחצו Enter להוספה.</p>
+          </div>
+          <div class="row input-row">
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+                </svg>
+              </span>
+              <input type="text" id="newDomain" data-i18n-placeholder="blocklist_input_placeholder" placeholder="לדוגמה: youtube.com" autocomplete="off" spellcheck="false" dir="ltr" />
+            </div>
+            <button id="addDomain" class="primary" data-i18n="blocklist_add_btn">הוסף</button>
+          </div>
+          <ul id="blocklist" class="chip-list" data-i18n-aria="blocklist_aria" aria-label="דומיינים חסומים"></ul>
+        </div>
+      </section>
+
+      <!-- Categories tab -->
+      <section class="panel" data-panel="categories" role="tabpanel" hidden>
+        <header class="panel-head">
+          <p class="eyebrow" data-i18n="categories_eyebrow">ערכות מוכנות</p>
+          <h1 data-i18n="categories_title">קטגוריות</h1>
+          <p class="lede" data-i18n="categories_lede">הפעילו או כבו קטגוריות שלמות. הרשימות הן נקודות פתיחה; ניתן להוסיף עוד דומיינים ברשימת החסימה.</p>
+        </header>
+        <div id="categoriesList" class="cat-grid"></div>
+      </section>
+
+      <!-- Schedule tab -->
+      <section class="panel" data-panel="schedule" role="tabpanel" hidden>
+        <header class="panel-head">
+          <p class="eyebrow" data-i18n="schedule_eyebrow">חסימה מבוססת זמן</p>
+          <h1 data-i18n="schedule_title">לוח זמנים</h1>
+          <p class="lede" data-i18n="schedule_lede">במהלך חלונות הזמן המתוזמנים, כל הקטגוריות ורשימת החסימה נאכפות, גם אם הקטגוריות כבויות.</p>
+        </header>
+
+        <div class="card toggle-card">
+          <div class="toggle-meta">
+            <h2 data-i18n="schedule_toggle_title">הפעל לוח זמנים</h2>
+            <p class="hint" data-i18n="schedule_toggle_hint">החל את חלונות הזמן. כשמושבת, לוחות הזמנים מתעלמים.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="scheduleEnabled" />
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+          </label>
+        </div>
+
+        <div id="scheduleBlocks" class="schedule-stack"></div>
+
+        <button id="addBlock" class="ghost full">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          <span data-i18n="schedule_add_block_btn">הוסף חלון זמן</span>
+        </button>
+      </section>
+
+      <!-- Whitelist tab -->
+      <section class="panel" data-panel="whitelist" role="tabpanel" hidden>
+        <header class="panel-head">
+          <p class="eyebrow" data-i18n="whitelist_eyebrow">אפשרו רק את מה שתבחרו</p>
+          <h1 data-i18n="whitelist_title">רשימת היתר</h1>
+          <p class="lede" data-i18n="whitelist_lede">במצב רשימת היתר, כל הרשת חסומה מלבד דומיינים שתוסיפו כאן. השתמשו בזהירות.</p>
+        </header>
+
+        <div class="card toggle-card">
+          <div class="toggle-meta">
+            <h2 data-i18n="whitelist_mode_label">מצב רשימת היתר</h2>
+            <p class="hint" data-i18n="whitelist_mode_hint">אפשר רק אתרים ברשימת היתר (חסום את כל השאר).</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="whitelistMode" />
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="whitelist_card_title">דומיינים מותרים</h2>
+            <p class="hint" data-i18n="whitelist_card_hint">הוסיפו את הדומיין הבסיסי. תת־דומיינים מותרים אוטומטית.</p>
+          </div>
+          <div class="row input-row">
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 12.5 9.5 18 20 6" />
+                </svg>
+              </span>
+              <input type="text" id="newWhitelist" data-i18n-placeholder="whitelist_input_placeholder" placeholder="לדוגמה: wikipedia.org" autocomplete="off" spellcheck="false" dir="ltr" />
+            </div>
+            <button id="addWhitelist" class="primary" data-i18n="whitelist_add_btn">אפשר</button>
+          </div>
+          <ul id="whitelist" class="chip-list chip-list-allow" data-i18n-aria="whitelist_aria" aria-label="דומיינים מותרים"></ul>
+        </div>
+      </section>
+
+      <!-- Security tab -->
+      <section class="panel" data-panel="security" role="tabpanel" hidden>
+        <header class="panel-head">
+          <p class="eyebrow" data-i18n="security_eyebrow">הגנה</p>
+          <h1 data-i18n="security_title">אבטחה</h1>
+          <p class="lede" data-i18n="security_lede">נעלו את ההגדרות בסיסמה ומנעו השבתה של התוסף באמצע פוקוס.</p>
+        </header>
+
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="security_card_title">הגנה בסיסמה</h2>
+            <p class="hint" data-i18n="security_card_hint">קבע סיסמה כדי לדרוש אותה לשינוי הגדרות, סיום פוקוס מוקדם, או השבתת התוסף.</p>
+          </div>
+          <div class="stack">
+            <div class="row">
+              <div class="input-wrap full">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="10.5" width="14" height="9.5" rx="2" />
+                    <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+                  </svg>
+                </span>
+                <input type="password" id="oldPassword" data-i18n-placeholder="security_old_pwd_placeholder" placeholder="סיסמה נוכחית (אם קיימת)" autocomplete="current-password" />
+              </div>
+            </div>
+            <div class="row input-row">
+              <div class="input-wrap">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v18M3 12h18" />
+                  </svg>
+                </span>
+                <input type="password" id="newPassword" data-i18n-placeholder="security_new_pwd_placeholder" placeholder="סיסמה חדשה (השאר ריק להסרה)" autocomplete="new-password" />
+              </div>
+              <button id="setPassword" class="primary" data-i18n="security_save_btn">שמור סיסמה</button>
+            </div>
+            <p id="pwStatus" class="status"></p>
+          </div>
+        </div>
+
+        <div class="card toggle-card">
+          <div class="toggle-meta">
+            <h2 data-i18n="security_strict_label">מצב מחמיר</h2>
+            <p class="hint" data-i18n="security_strict_lede">מצב מחמיר (לא ניתן להשבית את התוסף או לסיים פוקוס מוקדם). עדיין ניתן להסיר את התוסף מ־<code>chrome://extensions</code>.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="strictMode" />
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- General tab -->
+      <section class="panel" data-panel="general" role="tabpanel" hidden>
+        <header class="panel-head">
+          <p class="eyebrow" data-i18n="general_eyebrow">העדפות</p>
+          <h1 data-i18n="general_title">כללי</h1>
+          <p class="lede" data-i18n="general_lede">מתגים ראשיים, ההודעה המוצגת בעמודים חסומים, וסטטיסטיקת ההגנה שלכם.</p>
+        </header>
+
+        <div class="card lang-card">
+          <div class="card-head">
+            <h2 data-i18n="general_language_title">שפה</h2>
+            <p class="hint" data-i18n="general_language_lede">בחרו את שפת הממשק. ההגדרה משותפת לכל חלקי התוסף.</p>
+          </div>
+          <div class="lang-picker" role="radiogroup" data-i18n-aria="general_language_title" aria-label="שפה">
+            <button type="button" class="lang-option" data-lang="he" role="radio" aria-checked="false">
+              <span class="lang-native">עברית</span>
+              <span class="lang-tag">HE</span>
+            </button>
+            <button type="button" class="lang-option" data-lang="en" role="radio" aria-checked="false">
+              <span class="lang-native">English</span>
+              <span class="lang-tag">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card toggle-card">
+          <div class="toggle-meta">
+            <h2 data-i18n="general_blocking_label">חסימה מופעלת</h2>
+            <p class="hint" data-i18n="general_blocking_hint">מתג ראשי לכל פעולות החסימה.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="enabledMain" />
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="card toggle-card">
+          <div class="toggle-meta">
+            <h2 data-i18n="general_safesearch_label">אכיפת חיפוש בטוח</h2>
+            <p class="hint" data-i18n="general_safesearch_hint">אכוף חיפוש בטוח ב־Google, Bing, DuckDuckGo.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="safeSearchMain" />
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="general_message_title">הודעה בעמוד החסימה</h2>
+            <p class="hint" data-i18n="general_message_hint">תוצג למי שיגיע לעמוד חסום.</p>
+          </div>
+          <textarea id="customMessage" rows="3" data-i18n-placeholder="general_message_placeholder" placeholder="הערה קצרה לעצמכם בעתיד..."></textarea>
+          <div class="row end">
+            <button id="saveMessage" class="primary" data-i18n="general_save_btn">שמור הודעה</button>
+          </div>
+        </div>
+
+        <div class="card stats-card">
+          <div class="card-head">
+            <h2 data-i18n="general_stats_title">סטטיסטיקה</h2>
+            <p class="hint" data-i18n="general_stats_hint">אתרים שנחסמו במכשיר זה.</p>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-label" data-i18n="general_stats_today">חסימות היום</span>
+              <strong id="statsToday" class="stat-value">0</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label" data-i18n="general_stats_total">סך החסימות</span>
+              <strong id="statsTotal" class="stat-value">0</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
