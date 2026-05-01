@@ -166,14 +166,28 @@ function blockedPageUrl(reason) {
   return `${url}?reason=${encodeURIComponent(reason)}`;
 }
 
-async function rebuildAllRules() {
+// Serialize rebuilds so concurrent triggers (onInstalled + storage.onChanged,
+// alarm tick + UPDATE_SETTINGS, etc.) cannot race and try to add the same
+// rule IDs twice.
+let rebuildQueue = Promise.resolve();
+function rebuildAllRules() {
+  rebuildQueue = rebuildQueue.then(doRebuildAllRules).catch((e) => {
+    console.error("rebuildAllRules failed:", e);
+  });
+  return rebuildQueue;
+}
+
+async function doRebuildAllRules() {
   const s = await getSettings();
   const newRules = [];
   let id;
 
+  // SafeSearch is independent of the enabled flag — keep enforcing even when
+  // the rest of blocking is paused.
+  const safeSearchRules = s.safeSearch ? buildSafeSearchRules() : [];
+
   if (!s.enabled && !s.focus.active) {
-    // Extension off and no active focus — clear all rules.
-    await replaceAllRules([]);
+    await replaceAllRules(safeSearchRules);
     return;
   }
 
@@ -268,10 +282,7 @@ async function rebuildAllRules() {
     }
   }
 
-  // SafeSearch enforcement (independent of enabled flag if user set it)
-  if (s.safeSearch) {
-    newRules.push(...buildSafeSearchRules());
-  }
+  newRules.push(...safeSearchRules);
 
   await replaceAllRules(newRules);
 }
@@ -337,7 +348,12 @@ function buildSafeSearchRules() {
 
 async function replaceAllRules(newRules) {
   const existing = await chrome.declarativeNetRequest.getDynamicRules();
-  const removeRuleIds = existing.map((r) => r.id);
+  // Remove every existing rule plus every id we're about to add — the latter
+  // makes the operation idempotent if a previous batch partially applied.
+  const removeRuleIds = [...new Set([
+    ...existing.map((r) => r.id),
+    ...newRules.map((r) => r.id)
+  ])];
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds,
     addRules: newRules
@@ -495,6 +511,21 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
         }
         case "UPDATE_SETTINGS": {
           const s = await getSettings();
+          const patch = msg.patch && typeof msg.patch === "object" ? msg.patch : {};
+
+          // Reject patches that would weaken protection through the wrong door.
+          // Password changes must go through SET_PASSWORD (which re-verifies the
+          // old password). And while strict mode is on, blocking-related kill
+          // switches and strict mode itself cannot be turned off.
+          if ("passwordHash" in patch) {
+            sendResponse({ ok: false, error: "use_set_password" });
+            return;
+          }
+          if (s.strictMode && (patch.strictMode === false || patch.enabled === false)) {
+            sendResponse({ ok: false, error: "strict_mode" });
+            return;
+          }
+
           if (s.passwordHash) {
             if (msg.forcePassword) {
               // Caller (popup) demands fresh per-action authentication.
@@ -527,7 +558,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
               }
             }
           }
-          await setSettings(msg.patch);
+          await setSettings(patch);
           sendResponse({ ok: true });
           break;
         }
