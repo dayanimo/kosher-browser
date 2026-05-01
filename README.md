@@ -40,7 +40,6 @@ A Chrome extension that blocks distracting and inappropriate sites with schedule
 - Blocking is implemented via Chrome's `declarativeNetRequest` API. It blocks page (main_frame) navigations — not embedded resources. This is the standard approach for site blockers in Manifest V3.
 - The adult-content list shipped is a small starter list. Real-world content filtering needs a continually-updated list; consider supplementing with DNS-level filtering (e.g., your router's DNS, NextDNS, CleanBrowsing) or a service like Rimon for stronger enforcement.
 - Strict mode does **not** prevent removal from `chrome://extensions` — Chrome itself owns that page. For absolute enforcement use a managed Chrome policy or an OS-level tool.
-- Icons are not included; the extension still loads. To add icons, drop `icon16.png`, `icon48.png`, `icon128.png` into `icons/` and add an `"icons"` block to `manifest.json`.
 
 ## File map
 
@@ -51,6 +50,10 @@ kosher-browser/
 ├── popup/                 # Toolbar popup UI
 ├── options/               # Full settings page
 ├── blocked/               # Block page shown when a site is blocked
-├── content/               # Content script (placeholder)
-└── icons/                 # (optional) extension icons
+├── icons/                 # Toolbar/store icons (16/32/48/128)
+└── docs/                  # Privacy policy hosted via GitHub Pages
 ```
+
+## Publishing
+
+See [`STORE_LISTING.md`](STORE_LISTING.md) for the copy/paste-ready Chrome Web Store listing text, permission justifications, and packaging command.
